@@ -19,7 +19,6 @@
  * @param $form_id
  */
 function upei_roblib_legal_redirect_form_alter(&$form, &$form_state, $form_id){
-  debug($form_id);
   if($form_id ==='legal_login') {
     $form['#submit'][]  = 'upei_roblib_legal_redirect_legal_login_submit';
   }
