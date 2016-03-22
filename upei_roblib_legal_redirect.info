@@ -1,0 +1,6 @@
+name = UPEI Roblib Legal redirect
+description = hooks the legal_login form so we can redirect for use with the pydio cms bridge
+package = Roblib
+dependencies[] = legal
+version = 7.x-dev
+core = 7.x

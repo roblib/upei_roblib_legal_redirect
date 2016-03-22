@@ -1,0 +1,59 @@
+<?php
+
+/**
+ * @file
+ * Implementation legal form alter to redirect after first login for use with pydio cms bridge.
+ */
+
+
+/**
+ * Alter the legal_login form so we can log the user out after they accept the terms and conditions.
+ *
+ * Since we are using the LDAP authentication module and the pydio cms bridge and the legal module we have
+ * to logout after a user accepts the terms and conditions so the pydio cms bridge will work.  On first login
+ * the legal module ask them to accept the terms and conditions than we will log them out
+ * with a message.
+ *
+ * @param $form
+ * @param $form_state
+ * @param $form_id
+ */
+function upei_roblib_legal_redirect_form_alter(&$form, &$form_state, $form_id){
+  debug($form_id);
+  if($form_id ==='legal_login') {
+    $form['#submit'][]  = 'upei_roblib_legal_redirect_legal_login_submit';
+  }
+}
+
+/**
+ * This is a crazy work around to help new users avoid the confusion of logging out and back in
+ * to create there account.  This is only required because of the combination of ldap auth,
+ * legal and login destination module and pydio cms bridge being used.
+ *
+ * @param $form
+ * @param $form_state
+ */
+function upei_roblib_legal_redirect_legal_login_submit($form, $form_state){
+  $options = array();
+  $options['absolute'] = TRUE;
+  // we use the login destination module to redirect the below logout page to a
+  // node that explains why they were logged out.
+  $url = url('user/logout/legal',$options);
+  // drupal_goto seems to be getting altered by one of our many login modules
+  // like (ldap auth, or legal, or login destination) so we fall back to a header
+  // redirect here and short circuit things so the user will be forced to log back in.
+  header('Location: ' . $url, TRUE, '302');
+  drupal_exit($url);
+}
+
+/**
+ * Implements hook_user_login.
+ *
+ * When a user logs in redirect them to the my-account page.
+ *
+ * @param $edit
+ * @param $account
+ */
+function upei_roblib_legal_redirect_user_login(&$edit, $account){
+  $GLOBALS['destination'] = 'my-account';
+}
