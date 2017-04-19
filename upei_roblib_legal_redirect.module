@@ -19,7 +19,7 @@
  * @param $form_id
  */
 function upei_roblib_legal_redirect_form_alter(&$form, &$form_state, $form_id){
-  if($form_id ==='legal_login') {
+  if($form_id ==='site_disclaimer_confirm') {
     $form['#submit'][]  = 'upei_roblib_legal_redirect_legal_login_submit';
   }
 }
