@@ -54,5 +54,9 @@ function upei_roblib_legal_redirect_legal_login_submit($form, $form_state){
  * @param $account
  */
 function upei_roblib_legal_redirect_user_login(&$edit, $account){
-  $GLOBALS['destination'] = 'my-account';
+  // don't redirect if they are resetting their password
+  $query = 'user/reset/';
+  if(!(substr($GLOBALS['_GET']['q'], 0, strlen($query)) === $query)) {
+    $GLOBALS['destination'] = 'my-account';
+  }
 }
